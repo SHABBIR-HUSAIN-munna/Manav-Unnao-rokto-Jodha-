@@ -4,25 +4,25 @@ import {
   MapPin, 
   Phone, 
   MessageCircle, 
-  Calendar, 
   Filter, 
   ChevronDown,
   Navigation,
   CheckCircle2,
   AlertCircle
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
+
+import { Button } from "../components/ui/button";
+import { Card, CardContent } from "../components/ui/card";
+import Input from "../components/ui/Input"; 
 import { 
   Select, 
   SelectContent, 
   SelectItem, 
   SelectTrigger, 
   SelectValue 
-} from "@/components/ui/select";
-import { Badge } from "@/components/ui/badge";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+} from "../components/ui/select";
+import { Badge } from "../components/ui/badge";
+import { Avatar, AvatarFallback, AvatarImage } from "../components/ui/avatar";
 import { motion } from "motion/react";
 
 export default function FindBlood() {
@@ -31,57 +31,82 @@ export default function FindBlood() {
   const [location, setLocation] = useState("");
 
   const donors = [
-    { 
-      id: 1, 
-      name: "Ariful Islam", 
-      group: "A+", 
-      location: "Mirpur, Dhaka", 
-      distance: "2.5 km", 
-      lastDonation: "3 months ago", 
-      status: "Available",
-      phone: "+880 1712 345678",
-      image: "https://i.pravatar.cc/150?u=1"
-    },
-    { 
-      id: 2, 
-      name: "Sabbir Ahmed", 
-      group: "O+", 
-      location: "Uttara, Dhaka", 
-      distance: "5.1 km", 
-      lastDonation: "6 months ago", 
-      status: "Available",
-      phone: "+880 1812 345678",
-      image: "https://i.pravatar.cc/150?u=2"
-    },
-    { 
-      id: 3, 
-      name: "Nusrat Jahan", 
-      group: "B-", 
-      location: "Dhanmondi, Dhaka", 
-      distance: "1.2 km", 
-      lastDonation: "1 month ago", 
-      status: "Not Available",
-      phone: "+880 1912 345678",
-      image: "https://i.pravatar.cc/150?u=3"
-    },
-    { 
-      id: 4, 
-      name: "Tanvir Hossain", 
-      group: "AB+", 
-      location: "Banani, Dhaka", 
-      distance: "3.8 km", 
-      lastDonation: "4 months ago", 
-      status: "Available",
-      phone: "+880 1612 345678",
-      image: "https://i.pravatar.cc/150?u=4"
-    },
-    { 
-      id: 5, 
-      name: "Mehedi Hasan", 
-      group: "A+", 
-      location: "Gulshan, Dhaka", 
-      distance: "4.2 km", 
-      lastDonation: "8 months ago", 
+    { id: 1, name: "Ariful Islam", group: "A+", location: "Mirpur, Dhaka", distance: "2.5 km", lastDonation: "3 months ago", status: "Available", phone: "+880 1712 345678", image: "https://i.pravatar.cc/150?u=1" },
+    { id: 2, name: "Sabbir Ahmed", group: "O+", location: "Uttara, Dhaka", distance: "5.1 km", lastDonation: "6 months ago", status: "Available", phone: "+880 1812 345678", image: "https://i.pravatar.cc/150?u=2" },
+    { id: 3, name: "Nusrat Jahan", group: "B-", location: "Dhanmondi, Dhaka", distance: "1.2 km", lastDonation: "1 month ago", status: "Not Available", phone: "+880 1912 345678", image: "https://i.pravatar.cc/150?u=3" },
+    { id: 4, name: "Tanvir Hossain", group: "AB+", location: "Banani, Dhaka", distance: "3.8 km", lastDonation: "4 months ago", status: "Available", phone: "+880 1612 345678", image: "https://i.pravatar.cc/150?u=4" },
+    { id: 5, name: "Mehedi Hasan", group: "A+", location: "Gulshan, Dhaka", distance: "4.2 km", lastDonation: "8 months ago", status: "Available", phone: "+880 1512 345678", image: "https://i.pravatar.cc/150?u=5" },
+  ];
+
+  return (
+    <div className="container mx-auto px-4 py-12">
+      <div className="max-w-4xl mx-auto mb-12">
+        <h1 className="text-4xl font-heading font-bold mb-4">Find Blood Donors</h1>
+        <p className="text-muted-foreground">
+          Search for available donors in your area. Contact them directly for emergency needs.
+        </p>
+      </div>
+
+      {/* Search Filters */}
+      <Card className="max-w-5xl mx-auto mb-12 shadow-xl border-none bg-primary/5">
+        <CardContent className="p-6">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            
+            <Select onValueChange={setBloodGroup}>
+              <SelectTrigger className="bg-background rounded-xl h-12">
+                <SelectValue placeholder="Select Group" />
+              </SelectTrigger>
+              <SelectContent>
+                {["A+", "A-", "B+", "B-", "O+", "O-", "AB+", "AB-"].map(g => (
+                  <SelectItem key={g} value={g}>{g}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+
+            <Select>
+              <SelectTrigger className="bg-background rounded-xl h-12">
+                <SelectValue placeholder="Select Division" />
+              </SelectTrigger>
+              <SelectContent>
+                {["Dhaka", "Chittagong", "Rajshahi", "Khulna", "Barisal", "Sylhet", "Rangpur", "Mymensingh"].map(d => (
+                  <SelectItem key={d} value={d}>{d}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+
+            <Input 
+              placeholder="Enter location"
+              className="bg-background rounded-xl h-12"
+              value={location}
+              onChange={(e) => setLocation(e.target.value)}
+            />
+
+            <Button className="w-full h-12 rounded-xl">
+              <Search className="w-4 h-4 mr-2" />
+              Search Donors
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Donors */}
+      <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
+        {donors.map((donor) => (
+          <Card key={donor.id} className="p-6">
+            <div className="flex gap-4">
+              <img src={donor.image} className="w-16 h-16 rounded-full" />
+              <div>
+                <h3 className="font-bold">{donor.name}</h3>
+                <p className="text-sm text-gray-500">{donor.location}</p>
+                <p className="text-sm">Group: {donor.group}</p>
+              </div>
+            </div>
+          </Card>
+        ))}
+      </div>
+    </div>
+  );
+}      lastDonation: "8 months ago", 
       status: "Available",
       phone: "+880 1512 345678",
       image: "https://i.pravatar.cc/150?u=5"
